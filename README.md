@@ -15,7 +15,9 @@
 
 #### 游戏界面展示
 
+<div align=center>
 <img src="/appData/images/map.png" alt="map" width="500" />
+</div>
 
 
 #### 使用说明
