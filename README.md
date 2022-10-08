@@ -15,7 +15,7 @@
 
 #### 游戏界面展示
 
-<img src="/appData/images/map.png" alt="map" style="zoom:30%;" />
+<img src="/appData/images/map.png" alt="map" width="500" />
 
 
 #### 使用说明
