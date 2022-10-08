@@ -32,7 +32,7 @@ public class EnemyTank extends Hero implements Runnable{
             }
 
             //射击一次
-            if(Math.random()>1) this.shotEnemy();
+            if(Math.random()>0.4) this.shotEnemy();
             //休息3秒
             try {
                 Thread.sleep((int)(Math.random()*300)+1);
