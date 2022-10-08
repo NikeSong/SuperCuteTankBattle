@@ -12,7 +12,7 @@
 
 😎如果您熟悉Java或者愿意参与游戏的试玩，提出游戏体验上或者技术上的建议👩‍💻👨‍💻，我都非常欢迎您的加入！🧑🎉✨
 
-<img src="C:\Users\Administrator\Desktop\images\doc\map.png" alt="map" style="zoom:50%;" />
+<img src="/appData/images/map.png" alt="map" style="zoom:50%;" />
 
 
 
