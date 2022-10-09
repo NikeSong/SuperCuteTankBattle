@@ -14,10 +14,10 @@ public class TankGame01 extends JFrame {
     static Scanner scanner = new Scanner(System.in);
     public TankGame01()
     {
-        System.out.println("请输入选择：1.新游戏。2，继续。3，创建地图");
-        int key = Integer.parseInt(scanner.next());
-        mp = new DynamicPanel(key);//是以“开始游戏”模式（1）开始，还是“继续”开始（2）
-        if(key == 3) return;
+/*        System.out.println("请输入选择：1.新游戏。2，继续。3，创建地图");
+        int key = Integer.parseInt(scanner.next());*/
+        mp = new DynamicPanel(1);//是以“开始游戏”模式（1）开始，还是“继续”开始（2）
+    //    if(key == 3) return;
 
         this.add(mp);
         new Thread(mp).start();//启动刷新屏幕的线程

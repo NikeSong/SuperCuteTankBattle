@@ -14,7 +14,7 @@ public class DynamicPanel extends JPanel implements KeyListener,Runnable{
     Hero hero = null;
     Vector<EnemyTank> enemyTanks = new Vector<EnemyTank>();
     Vector<Bomb> bombs = new Vector<Bomb>();//存放提供坦克爆炸效果的爆炸对象
-    public static int InienemyNum = 3;
+    public static int InienemyNum = 10;
     public static int PanelWidth = 950;
     public static int PanelHeight = 750;
 
