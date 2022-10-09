@@ -12,8 +12,8 @@ public class Tank
     public static int width = 100/sizeRed;
     public static int height = 100/sizeRed;
     public int speed = 10;
-    private Dir dir = Dir.UP;
-    private TankType type = TankType.NORMAL;
+    public Dir dir = Dir.UP;
+    public TankType type = TankType.NORMAL;
     public Tank(int x, int y, Dir dir, TankType type) {
         this.x = x;
         this.y = y;

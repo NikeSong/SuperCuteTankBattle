@@ -18,9 +18,9 @@ public class DynamicPanel extends JPanel implements KeyListener,Runnable{
     public static int PanelWidth = 950;
     public static int PanelHeight = 750;
 
-    private static final int blockWidth = 19;
-    private static final int blockHeight = 15;
-    private static final int nodeSize = 50;
+    public static final int blockWidth = 19;
+    public static final int blockHeight = 15;
+    public static final int nodeSize = 50;
     private static final String grassPath = "appData/images/map/grass.png";
     private static final String stonePath = "appData/images/map/stone.png";
     private static final String bgPath = "appData/images/map/ground.png";
@@ -30,7 +30,7 @@ public class DynamicPanel extends JPanel implements KeyListener,Runnable{
     public DynamicPanel(int key) {
         this.setSize(PanelWidth,PanelHeight);
         //绘制英雄
-        hero = new Hero(PanelWidth/2,PanelHeight-Tank.height,Dir.UP,TankType.NORMAL);
+        hero = new Hero(PanelWidth/2,PanelHeight-Tank.height-nodeSize,Dir.UP,TankType.NORMAL);
         //创造敌人
         switch(key)
         {
@@ -141,7 +141,7 @@ public class DynamicPanel extends JPanel implements KeyListener,Runnable{
             if(n.type == Node.stone) g.drawImage(stoneImage,n.x*nodeSize,n.y*nodeSize,nodeSize,nodeSize,panel);
             else if(n.type == Node.grass) g.drawImage(grassImage,n.x*nodeSize,n.y*nodeSize,nodeSize,nodeSize,panel);
         }
-        int i = 0;
+ /*       int i = 0;
 
         for(int j = 0; j< blockWidth; j++)  //上面横排
             g.drawImage(stoneImage,j*nodeSize,i*nodeSize,nodeSize,nodeSize,panel);
@@ -151,9 +151,7 @@ public class DynamicPanel extends JPanel implements KeyListener,Runnable{
         for(int j = 0; j< blockWidth; j++)
             g.drawImage(stoneImage,j*nodeSize,i*nodeSize,nodeSize,nodeSize,panel);
         i = blockWidth -1;
-        for(int j = 1; j< blockHeight -1; j++)  g.drawImage(stoneImage,i*nodeSize,j*nodeSize,nodeSize,nodeSize,panel);
-
-
+        for(int j = 1; j< blockHeight -1; j++)  g.drawImage(stoneImage,i*nodeSize,j*nodeSize,nodeSize,nodeSize,panel);*/
     }
 
     /**

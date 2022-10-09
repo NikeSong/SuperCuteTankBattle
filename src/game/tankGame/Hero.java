@@ -6,38 +6,10 @@ import java.util.Vector;
 public class Hero extends Tank{
     public Vector<Shot> bullets = new Vector<Shot>();
     static Vector<Hero> allHeroes = new Vector<Hero>();//获得所有的坦克列表
+    int interval = 0;
+    //移动过程中若即将碰到block或者敌人时（距离小于一个speed单位）
+    // 则移动当前坦克的距离为interval，即：碰上去.
 
-    public void Move(Dir dir)
-    {
-        boolean touched = isTouchOtherTank();
-        switch (dir)
-        {
-            case UP:
-                if(y-speed >= 0 && !touched)//没碰到别的坦克且不会出界
-                    y-=speed;
-                else if(!touched)//没碰到别的坦克，只是出界了
-                    y=0;//移动到界上去
-                break;
-            case DOWN:
-                if(y+Tank.height+speed < DynamicPanel.PanelHeight && !touched)
-                    y+=speed;
-                else if(!touched)
-                    y =  DynamicPanel.PanelHeight-Tank.height;
-                break;
-            case LEFT:
-                if(x-speed >= 0 && !touched)
-                    x-=speed;
-                else if(!touched)
-                    x = 0;
-                break;
-            case RIGHT:
-                if(x+speed+Tank.height< DynamicPanel.PanelWidth && !touched)
-                    x+=speed;
-                else if(!touched)
-                    x = DynamicPanel.PanelWidth - Tank.height;
-                break;
-        }
-    }
 
     public static void setEnemyTanks(Vector<Hero> heroes) {
         Hero.allHeroes = heroes;
@@ -69,6 +41,39 @@ public class Hero extends Tank{
         new Thread(bullet).start();
     }
 
+    public void Move(Dir dir)
+    {
+        boolean touchOtherTank = isTouchOtherTank();
+        boolean touchBlock = isTouchBlock();
+        switch (dir)
+        {
+            case UP:
+                if(!touchBlock && !touchOtherTank)//没碰到别的坦克且不会出界
+                    y-=speed;
+                else if(touchBlock)//没碰到别的坦克，只是出界了
+                    y-=interval;//移动到界上去
+                break;
+            case DOWN:
+                if(!touchBlock && !touchOtherTank)
+                    y+=speed;
+                else if(touchBlock)
+                    y +=interval;
+                break;
+            case LEFT:
+                if(!touchBlock && !touchOtherTank)
+                    x-=speed;
+                else if(touchBlock)
+                    x -=interval;
+                break;
+            case RIGHT:
+                if(!touchBlock && !touchOtherTank)
+                    x+=speed;
+                else if(touchBlock)
+                    x +=interval;
+                break;
+        }
+    }
+
     //编写方法，判断当前坦克是否和别的敌人坦克发生了碰撞
     public boolean isTouchOtherTank()
     {
@@ -83,28 +88,28 @@ public class Hero extends Tank{
                     {
                         if(tank.getDir() ==Dir.UP||tank.getDir() ==Dir.DOWN)//上下
                         {
-                            if(this.x>=tank.x &&
-                                    this.x<=tank.x+Tank.width &&
-                                    this.y>=tank.y &&
-                                    this.y<=tank.y+Tank.height)
+                            if(this.x>tank.x &&
+                                    this.x<tank.x+Tank.width &&
+                                    this.y>tank.y &&
+                                    this.y<tank.y+Tank.height)
                                 return true;
-                            if(this.x+Tank.width>=tank.x &&
-                                    this.x+Tank.width<=tank.x+Tank.width &&
-                                    this.y>=tank.y &&
-                                    this.y<=tank.y+Tank.height)
+                            if(this.x+Tank.width>tank.x &&
+                                    this.x+Tank.width<tank.x+Tank.width &&
+                                    this.y>tank.y &&
+                                    this.y<tank.y+Tank.height)
                                 return true;
                         }
                         else//左右
                         {
-                            if(this.x>=tank.x &&
-                                    this.x<=tank.x+Tank.width &&
-                                    this.y>=tank.y &&
-                                    this.y<=tank.y+Tank.height)
+                            if(this.x>tank.x &&
+                                    this.x<tank.x+Tank.width &&
+                                    this.y>tank.y &&
+                                    this.y<tank.y+Tank.height)
                                 return true;
-                            if(this.x+Tank.width>=tank.x &&
-                                    this.x+Tank.width<=tank.x+Tank.width &&
-                                    this.y>=tank.y &&
-                                    this.y<=tank.y+Tank.height)
+                            if(this.x+Tank.width>tank.x &&
+                                    this.x+Tank.width<tank.x+Tank.width &&
+                                    this.y>tank.y &&
+                                    this.y<tank.y+Tank.height)
                                 return true;
                         }
                     }
@@ -118,28 +123,28 @@ public class Hero extends Tank{
                     {
                         if(tank.getDir() ==Dir.UP||tank.getDir() ==Dir.DOWN)//上下
                         {
-                            if(this.x >= tank.x &&
-                                    this.x  <= tank.x+Tank.width &&
-                                    this.y + Tank.width>=tank.y &&
-                                    this.y + Tank.width<=tank.y+Tank.height)
+                            if(this.x > tank.x &&
+                                    this.x  < tank.x+Tank.width &&
+                                    this.y + Tank.width>tank.y &&
+                                    this.y + Tank.width<tank.y+Tank.height)
                                 return true;
-                            if(this.x+Tank.width>=tank.x &&
-                                    this.x+Tank.width<=tank.x+Tank.width &&
-                                    this.y+Tank.height>=tank.y &&
-                                    this.y+Tank.height<=tank.y+Tank.height)
+                            if(this.x+Tank.width>tank.x &&
+                                    this.x+Tank.width<tank.x+Tank.width &&
+                                    this.y+Tank.height>tank.y &&
+                                    this.y+Tank.height<tank.y+Tank.height)
                                 return true;
                         }
                         else//左右
                         {
-                            if(this.x>=tank.x &&
-                                    this.x<=tank.x+Tank.width &&
-                                    this.y + Tank.width>=tank.y &&
-                                    this.y + Tank.width<=tank.y+Tank.width)
+                            if(this.x>tank.x &&
+                                    this.x<tank.x+Tank.width &&
+                                    this.y + Tank.width>tank.y &&
+                                    this.y + Tank.width<tank.y+Tank.width)
                                 return true;
-                            if(this.x+Tank.width>=tank.x &&
-                                    this.x+Tank.width<=tank.x+Tank.width &&
-                                    this.y +Tank.width>=tank.y &&
-                                    this.y+Tank.width<=tank.y+Tank.height)
+                            if(this.x+Tank.width>tank.x &&
+                                    this.x+Tank.width<tank.x+Tank.width &&
+                                    this.y +Tank.width>tank.y &&
+                                    this.y+Tank.width<tank.y+Tank.height)
                                 return true;
                         }
                     }
@@ -153,28 +158,28 @@ public class Hero extends Tank{
                     {
                         if(tank.getDir() ==Dir.UP||tank.getDir() ==Dir.DOWN)//上下
                         {
-                            if(this.x >= tank.x &&
-                                    this.x  <= tank.x+Tank.width &&
-                                    this.y >=tank.y &&
-                                    this.y <=tank.y+Tank.height)
+                            if(this.x > tank.x &&
+                                    this.x  < tank.x+Tank.width &&
+                                    this.y >tank.y &&
+                                    this.y <tank.y+Tank.height)
                                 return true;
-                            if(this.x>=tank.x &&
-                                    this.x<=tank.x+Tank.width &&
-                                    this.y+Tank.height>=tank.y &&
-                                    this.y+Tank.height<=tank.y+Tank.height)
+                            if(this.x>tank.x &&
+                                    this.x<tank.x+Tank.width &&
+                                    this.y+Tank.height>tank.y &&
+                                    this.y+Tank.height<tank.y+Tank.height)
                                 return true;
                         }
                         else//左右
                         {
-                            if(this.x>=tank.x &&
-                                    this.x<=tank.x+Tank.width &&
-                                    this.y >=tank.y &&
-                                    this.y <=tank.y+Tank.width)
+                            if(this.x>tank.x &&
+                                    this.x<tank.x+Tank.width &&
+                                    this.y >tank.y &&
+                                    this.y <tank.y+Tank.width)
                                 return true;
-                            if(this.x>=tank.x &&
-                                    this.x <=tank.x+Tank.width &&
-                                    this.y +Tank.width>=tank.y &&
-                                    this.y+Tank.width<=tank.y+Tank.height)
+                            if(this.x>tank.x &&
+                                    this.x <tank.x+Tank.width &&
+                                    this.y +Tank.width>tank.y &&
+                                    this.y+Tank.width<tank.y+Tank.height)
                                 return true;
                         }
                     }
@@ -188,28 +193,28 @@ public class Hero extends Tank{
                     {
                         if(tank.getDir() ==Dir.UP||tank.getDir() ==Dir.DOWN)//上下
                         {
-                            if(this.x+Tank.width >= tank.x &&
-                                    this.x + Tank.width <= tank.x+Tank.width &&
-                                    this.y>=tank.y &&
-                                    this.y<=tank.y+Tank.height)
+                            if(this.x+Tank.width > tank.x &&
+                                    this.x + Tank.width < tank.x+Tank.width &&
+                                    this.y>tank.y &&
+                                    this.y<tank.y+Tank.height)
                                 return true;
-                            if(this.x+Tank.width>=tank.x &&
-                                    this.x+Tank.width<=tank.x+Tank.width &&
-                                    this.y+Tank.height>=tank.y &&
-                                    this.y+Tank.height<=tank.y+Tank.height)
+                            if(this.x+Tank.width>tank.x &&
+                                    this.x+Tank.width<tank.x+Tank.width &&
+                                    this.y+Tank.height>tank.y &&
+                                    this.y+Tank.height<tank.y+Tank.height)
                                 return true;
                         }
                         else//左右
                         {
-                            if(this.x+ Tank.width>=tank.x &&
-                                    this.x+ Tank.width <=tank.x+Tank.width &&
-                                    this.y >=tank.y &&
-                                    this.y<=tank.y+Tank.width)
+                            if(this.x+ Tank.width>tank.x &&
+                                    this.x+ Tank.width <tank.x+Tank.width &&
+                                    this.y >tank.y &&
+                                    this.y<tank.y+Tank.width)
                                 return true;
-                            if(this.x+Tank.width>=tank.x &&
-                                    this.x+Tank.width<=tank.x+Tank.width &&
-                                    this.y +Tank.width>=tank.y &&
-                                    this.y+Tank.width<=tank.y+Tank.height)
+                            if(this.x+Tank.width>tank.x &&
+                                    this.x+Tank.width<tank.x+Tank.width &&
+                                    this.y +Tank.width>tank.y &&
+                                    this.y+Tank.width<tank.y+Tank.height)
                                 return true;
                         }
                     }
@@ -240,5 +245,93 @@ public class Hero extends Tank{
             }
         }
         return false;*/
+    }
+
+    public boolean isTouchBlock()
+    {
+        int nodesize = DynamicPanel.nodeSize;
+        switch(getDir())
+        {
+            case UP :
+                for(int i=0;i<Map.map.size();i++)
+                {
+                    Node n = Map.map.get(i);
+                    int xx = n.x*nodesize,yy = n.y*nodesize;
+                    if(y-speed < yy+nodesize && y-speed > yy && x > xx-nodesize && x<xx+nodesize)
+                    {
+                        interval = y-(yy+nodesize);
+                        if(this.getType() == TankType.NORMAL)
+                        {
+                            System.out.println(this);
+                            System.out.println("xx = "+xx+"  yy = "+yy);
+                        }
+
+                        return true;
+                    }
+                }
+                break;
+            case DOWN:
+                for(int i=0;i<Map.map.size();i++)
+                {
+                    Node n = Map.map.get(i);
+                    int xx = n.x*nodesize,yy = n.y*nodesize;
+                    if(y+Tank.width+speed > yy && y+Tank.width+speed < yy+nodesize && x > xx-nodesize && x<xx+nodesize)
+                    {
+                        interval = yy - (y+Tank.width);
+                        if(this.getType() == TankType.NORMAL)
+                        {
+                            System.out.println(this);
+                            System.out.println(xx+"down "+yy);
+                        }
+                        return true;
+                    }
+                }
+                break;
+            case LEFT:
+                for(int i=0;i<Map.map.size();i++)
+                {
+                    Node n = Map.map.get(i);
+                    int xx = n.x*nodesize,yy = n.y*nodesize;
+                    if(x-speed < xx+nodesize && x-speed > xx && y > yy-nodesize && y<yy+nodesize)
+                    {
+                        interval = x - (xx+nodesize);
+                        if(this.getType() == TankType.NORMAL)
+                        {
+                            System.out.println(this);
+                            System.out.println(xx+" left "+yy);
+                        }
+                        return true;
+                    }
+                }
+                break;
+            case RIGHT:
+                for(int i=0;i<Map.map.size();i++)
+                {
+                    Node n = Map.map.get(i);
+                    int xx = n.x*nodesize,yy = n.y*nodesize;
+                    if(x+Tank.width+speed > xx && x+Tank.width+speed < xx+nodesize && y > yy-nodesize && y<yy+nodesize)
+                    {
+                        interval = xx - (x+Tank.width);
+                        if(this.getType() == TankType.NORMAL)
+                        {
+                            System.out.println(this);
+                            System.out.println(xx+"  "+yy);
+                        }
+                        return true;
+                    }
+                }
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Hero{" +
+                "x=" + x +
+                ", y=" + y +
+                ", speed=" + speed +
+                ", dir=" + dir +
+                '}';
     }
 }

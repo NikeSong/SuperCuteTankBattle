@@ -18,6 +18,15 @@ class Node implements Serializable{
         this.x = x;
         this.y = y;
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "type=" + type +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
 
 public class Map {
@@ -94,6 +103,20 @@ public class Map {
         try {
             ois = new ObjectInputStream(new FileInputStream(filePath));
             Node n = (Node) ois.readObject();
+            //添加上下边缘的石块
+            for(int i=0;i<DynamicPanel.blockWidth;i++)
+            {
+                map.add(new Node(i,0,Node.stone));
+                map.add(new Node(i,DynamicPanel.blockHeight-1,Node.stone));
+            }
+            //添加左右边缘的石块
+            for(int i=1;i<DynamicPanel.blockHeight-1;i++)
+            {
+                map.add(new Node(0,i,Node.stone));
+                map.add(new Node(DynamicPanel.blockWidth-1,i,Node.stone));
+            }
+
+
             while(true)
             {
                 map.add(n);
