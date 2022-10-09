@@ -1,6 +1,5 @@
 package game.tankGame;
 
-import java.awt.*;
 import java.util.Vector;
 
 //自己的坦克
@@ -20,10 +19,10 @@ public class Hero extends Tank{
                     y=0;//移动到界上去
                 break;
             case DOWN:
-                if(y+Tank.height+speed < MyPanel.PanelHeight && !touched)
+                if(y+Tank.height+speed < DynamicPanel.PanelHeight && !touched)
                     y+=speed;
                 else if(!touched)
-                    y =  MyPanel.PanelHeight-Tank.height;
+                    y =  DynamicPanel.PanelHeight-Tank.height;
                 break;
             case LEFT:
                 if(x-speed >= 0 && !touched)
@@ -32,10 +31,10 @@ public class Hero extends Tank{
                     x = 0;
                 break;
             case RIGHT:
-                if(x+speed+Tank.height<MyPanel.PanelWidth && !touched)
+                if(x+speed+Tank.height< DynamicPanel.PanelWidth && !touched)
                     x+=speed;
                 else if(!touched)
-                    x = MyPanel.PanelWidth - Tank.height;
+                    x = DynamicPanel.PanelWidth - Tank.height;
                 break;
         }
     }

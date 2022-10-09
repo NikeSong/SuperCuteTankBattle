@@ -1,7 +1,5 @@
 package game.tankGame;
 
-import java.awt.*;
-
 public class Shot implements Runnable{
     private int x;
     private int y;
@@ -34,7 +32,7 @@ public class Shot implements Runnable{
                     x += speed;
                     break;
             }
-            if(!(x>=0 && x<= MyPanel.PanelWidth && y>=0 && y<= MyPanel.PanelHeight)) break;
+            if(!(x>=0 && x<= DynamicPanel.PanelWidth && y>=0 && y<= DynamicPanel.PanelHeight)) break;
 
         }
         isLive = false;

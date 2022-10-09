@@ -9,27 +9,42 @@ import java.util.Vector;
 
 @SuppressWarnings({"all"})
 //游戏绘图区域
-public class MyPanel extends JPanel implements KeyListener,Runnable{
+public class DynamicPanel extends JPanel implements KeyListener,Runnable{
     //define hero
     Hero hero = null;
     Vector<EnemyTank> enemyTanks = new Vector<EnemyTank>();
     Vector<Bomb> bombs = new Vector<Bomb>();//存放提供坦克爆炸效果的爆炸对象
     public static int InienemyNum = 3;
-    public static int PanelWidth = 1000;
+    public static int PanelWidth = 950;
     public static int PanelHeight = 750;
 
+    private static final int blockWidth = 19;
+    private static final int blockHeight = 15;
+    private static final int nodeSize = 50;
+    private static final String grassPath = "appData/images/map/grass.png";
+    private static final String stonePath = "appData/images/map/stone.png";
+    private static final String bgPath = "appData/images/map/ground.png";
+
+
     //界面的初始化绘图
-    public MyPanel(int key) {
+    public DynamicPanel(int key) {
         this.setSize(PanelWidth,PanelHeight);
         //绘制英雄
         hero = new Hero(PanelWidth/2,PanelHeight-Tank.height,Dir.UP,TankType.NORMAL);
         //创造敌人
-        if(key == 1)for(int i = 0;i < InienemyNum;i++)
-            enemyTanks.add(new EnemyTank(PanelWidth*(i+1)/(InienemyNum+1),0,Dir.DOWN,TankType.ENEMY));
-        else if(key == 2)
+        switch(key)
         {
-            Recorder.loadRecord();
-            enemyTanks = Recorder.getEnemyInfoLoad();
+            case 1 ://生成敌人坦克对象
+                if(key == 1)for(int i = 0;i < InienemyNum;i++)
+                enemyTanks.add(new EnemyTank(PanelWidth*(i+1)/(InienemyNum+1),0,Dir.DOWN,TankType.ENEMY));
+                break;
+            case 2://加载上局游戏记录
+                Recorder.loadRecord();
+                enemyTanks = Recorder.getEnemyInfoLoad();
+                break;
+            case 3://仅创建地图
+                Map.ConstructMap();
+                return;
         }
 
         //记录所有坦克的初始信息，供判断是否存在坦克相接触的情况
@@ -42,15 +57,19 @@ public class MyPanel extends JPanel implements KeyListener,Runnable{
         Recorder.setEnemyInfoKeep(enemyTanks);//记录敌人坦克信息，退出程序时会记录当前状态.以提供“继续游戏”功能
         //播放背景音乐
         new PlayWave("appData\\music\\test4.wav").start();
-
+        // 加载地图
+        Map.ReadMap("NIKECITY");
     }
 
     //刷新屏幕图像的函数
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.setColor(Color.CYAN);//设置背景颜色
-        g.fillRect(0,0,PanelWidth,PanelHeight);//填充背景颜色
+
+        //g.setColor(Color.CYAN);//设置背景颜色
+        //g.fillRect(0,0,PanelWidth,PanelHeight);//填充背景颜色
+        Toolkit tool = this.getToolkit();
+        bgPaint(g,tool,this);
         //绘制得分信息
         ShowRecord(g);
         //绘制hero的子弹
@@ -98,6 +117,44 @@ public class MyPanel extends JPanel implements KeyListener,Runnable{
         //# Test
         //System.out.println("Hero 的子弹数目为:"+ hero.bullets.size());
     }//每次界面重置会自动重新执行，在本软件中，每过一段时间也会重新执行
+
+    //绘制背景图片
+    public static void bgPaint(Graphics g, Toolkit tool, JPanel panel) {
+        //加载图片信息
+        Image bgImage = tool.getImage(bgPath);
+        Image grassImage = tool.getImage(grassPath);
+        Image stoneImage = tool.getImage(stonePath);
+
+        //绘制背景图片
+        for(int i = 0; i< blockWidth; i++)
+        {
+            for(int j = 0; j< blockHeight; j++)
+            {
+                g.drawImage(bgImage,i*nodeSize,j*nodeSize,nodeSize,nodeSize,panel);
+            }
+        }
+
+        //绘制草地和石块
+        for(int i=0;i<Map.map.size();i++)
+        {
+            Node n = Map.map.get(i);
+            if(n.type == Node.stone) g.drawImage(stoneImage,n.x*nodeSize,n.y*nodeSize,nodeSize,nodeSize,panel);
+            else if(n.type == Node.grass) g.drawImage(grassImage,n.x*nodeSize,n.y*nodeSize,nodeSize,nodeSize,panel);
+        }
+        int i = 0;
+
+        for(int j = 0; j< blockWidth; j++)  //上面横排
+            g.drawImage(stoneImage,j*nodeSize,i*nodeSize,nodeSize,nodeSize,panel);
+        for(int j = 1; j< blockHeight -1; j++) //左边竖着边缘
+           g.drawImage(stoneImage,i*nodeSize,j*nodeSize,nodeSize,nodeSize,panel);
+        i = blockHeight -1;
+        for(int j = 0; j< blockWidth; j++)
+            g.drawImage(stoneImage,j*nodeSize,i*nodeSize,nodeSize,nodeSize,panel);
+        i = blockWidth -1;
+        for(int j = 1; j< blockHeight -1; j++)  g.drawImage(stoneImage,i*nodeSize,j*nodeSize,nodeSize,nodeSize,panel);
+
+
+    }
 
     /**
      *
@@ -166,9 +223,9 @@ public class MyPanel extends JPanel implements KeyListener,Runnable{
         g.setColor(Color.BLACK);
         Font font = new Font("微软雅黑",Font.BOLD,20);//字体为微软雅黑加粗25号
         g.setFont(font);
-        g.drawString("累计得分:",1020,30);
-        DrawTank(new Tank(1020,60,Dir.UP,TankType.ENEMY),g);
-        g.drawString("x "+Recorder.getScore(),1090,90);
+        g.drawString("累计得分:",DynamicPanel.PanelWidth+20,30);
+        DrawTank(new Tank(DynamicPanel.PanelWidth+20,60,Dir.UP,TankType.ENEMY),g);
+        g.drawString("x "+Recorder.getScore(),DynamicPanel.PanelWidth+90,90);
     }
 
     // 字符输出的监听

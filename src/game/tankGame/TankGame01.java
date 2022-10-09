@@ -1,7 +1,6 @@
 package game.tankGame;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Scanner;
@@ -9,15 +8,17 @@ import java.util.Scanner;
 @SuppressWarnings({"all"})
 
 public class TankGame01 extends JFrame {
-    MyPanel mp = null;
+    DynamicPanel mp = null;
     int FrameWidth = 1200+14;
     int FrameHeight = 750+37;
     static Scanner scanner = new Scanner(System.in);
     public TankGame01()
     {
-/*        System.out.println("请输入选择：1.新游戏。2，继续");
-        String key = scanner.next();*/
-        mp = new MyPanel(Integer.parseInt("1"));//是以“开始游戏”模式（1）开始，还是“继续”开始（2）
+        System.out.println("请输入选择：1.新游戏。2，继续。3，创建地图");
+        int key = Integer.parseInt(scanner.next());
+        mp = new DynamicPanel(key);//是以“开始游戏”模式（1）开始，还是“继续”开始（2）
+        if(key == 3) return;
+
         this.add(mp);
         new Thread(mp).start();//启动刷新屏幕的线程
         this.setSize(FrameWidth,FrameHeight);
