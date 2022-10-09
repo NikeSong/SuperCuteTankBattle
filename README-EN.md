@@ -1,7 +1,6 @@
 # SuperCuteTankBattle
 
-[中文版](https://gitee.com/ni-kesong/super-cute-tank-battle/blob/master/README.md#https://gitee.com/ni-kesong/super-cute-tank-battle/blob/master/README-EN.md)
-
+[中文版](https://github.com/NikeSong/SuperCuteTankBattle/blob/master/README.md)
 #### Introduction
 
 🎢 Using Java development tanks war games, at present is still in the state of the original.
