@@ -1,6 +1,6 @@
 # SuperCuteTankBattle
 
-
+[English version](https://github.com/NikeSong/SuperCuteTankBattle/blob/master/README-EN.md)
 
 #### 介绍
 
